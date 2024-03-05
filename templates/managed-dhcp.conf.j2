@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+
+{% if dnsmasq_dhcp_log %}
+log-dhcp
+{% endif %}
+
+# dhcp-range=172.16.10.80,172.16.10.90,2h

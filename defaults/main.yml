@@ -1,0 +1,8 @@
+---
+dnsmasq_poll_resolve: yes
+dnsmasq_domain: 
+dnsmasq_cache_size: 150
+dnsmasq_upstreams: []
+dnsmasq_query_log: no
+
+dnsmasq_dhcpd_leases: files/dhcpd.leases

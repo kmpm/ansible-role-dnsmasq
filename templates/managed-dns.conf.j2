@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+domain-needed
+bogus-priv
+{% if not dnsmasq_poll_resolve %}
+no-poll
+{% endif %}
+
+{% if dnsmasq_domain %}
+domain={{ dnsmasq_domain }}
+local=/{{ dnsmasq_domain }}/
+{% endif %}
+
+
+{% for entry in dnsmasq_upstreams %}
+server={% for domain in entry.domains %}/{{ domain }}{% endfor %}/{{ entry.server }}
+{% endfor %}
+
+cache-size={{ dnsmasq_cache_size }}
+
+{% if dnsmasq_query_log %}
+log-queries
+{% endif %}

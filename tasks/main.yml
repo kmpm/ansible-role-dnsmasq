@@ -1,0 +1,42 @@
+---
+- name: Install packages
+  ansible.builtin.apt:
+    cache_valid_time: 3600
+    pkg:
+      - dnsmasq
+
+- name: Enable and start dnsmasq
+  ansible.builtin.service:
+    name: dnsmasq
+    state: started
+    enabled: yes
+
+- name: Configure core dnsmasq
+  ansible.builtin.template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+    owner: root
+    group: root
+    mode: '0644'
+    validate: "/usr/sbin/dnsmasq --test -C %s"
+  notify: restart dnsmasq
+
+- name: Configure dnsmasq DNS
+  ansible.builtin.template:
+    src: managed-dns.conf.j2
+    dest: /etc/dnsmasq.d/01-managed-dns.conf
+    owner: root
+    group: root
+    mode: '0644'
+    validate: "/usr/sbin/dnsmasq --test -C %s"
+  notify: restart dnsmasq
+
+- name: Configure dnsmasq DHCP
+  ansible.builtin.template:
+    src: managed-dhcp.conf.j2
+    dest: /etc/dnsmasq.d/02-managed-dhcp.conf
+    owner: root
+    group: root
+    mode: '0644'
+    validate: "/usr/sbin/dnsmasq --test -C %s"
+  notify: restart dnsmasq
