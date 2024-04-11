@@ -1,8 +1,15 @@
 ---
-dnsmasq_poll_resolve: yes
-dnsmasq_domain: 
+dnsmasq_enable_dns: false
+dnsmasq_enable_dhcp: false
+
+
+dnsmasq_poll_resolve: true
+dnsmasq_domain:
 dnsmasq_cache_size: 150
 dnsmasq_upstreams: []
-dnsmasq_query_log: no
-
+dnsmasq_query_log: false
 dnsmasq_dhcpd_leases: files/dhcpd.leases
+
+# dhcp
+dnsmasq_hosts: []
+dnsmasq_subnets: []

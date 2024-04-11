@@ -1,7 +1,35 @@
 # {{ ansible_managed }}
 
+
 {% if dnsmasq_dhcp_log %}
 log-dhcp
 {% endif %}
 
-# dhcp-range=172.16.10.80,172.16.10.90,2h
+
+{% for subnet in dnsmasq_subnets %}
+{% for range in subnet.ranges %}
+    {%- set range_item = [ range.start | default('a'), range.stop | default('b')] %}
+    {%- if range.set is defined %}
+    {%- set range_item = ['set ' ~ range.set] + range_item %}
+    {%- endif %}
+    
+    {%- if subnet.netmask is defined %}
+    {%- set range_item = range_item + [subnet.netmask] %}
+    {%- endif %}
+    {%- set range_item = range_item + [range.lease_time | default('24h')] %}
+# dhcp-range={{ range_item | join(',') }}
+{% endfor %}
+{% endfor %}
+
+
+{% for host in dnsmasq_hosts  | sort(attribute='hwaddr') %}
+{% set host_item = [host.hwaddr, host.ipv4] %}
+{% if host.hostname is defined %}
+{% set host_item = host_item + [host.hostname] %}
+{% endif %}
+{% set host_item = host_item + [host.lease_time | default('2h')] %}
+dhcp-host={{ host_item | join(',') }}
+{% endfor %}
+
+
+
