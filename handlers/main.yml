@@ -1,13 +1,15 @@
 - name: Reload dnsmasq service
   ansible.builtin.systemd:
     name: dnsmasq
-    state: reloaded
-    enabled: yes
+    state: stopped
+    enabled: false
   listen: reload dnsmasq
+  when: dnsmasq_enable_dhcp or dnsmasq_enable_dns
 
 - name: Restart dnsmasq service
   ansible.builtin.systemd:
     name: dnsmasq
-    state: restarted
-    enabled: yes
+    state: stopped
+    enabled: false
   listen: restart dnsmasq
+  when: dnsmasq_enable_dhcp or dnsmasq_enable_dns

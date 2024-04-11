@@ -1,4 +1,6 @@
 # {{ ansible_managed }}
+
+
 domain-needed
 bogus-priv
 {% if not dnsmasq_poll_resolve %}
@@ -10,7 +12,6 @@ domain={{ dnsmasq_domain }}
 local=/{{ dnsmasq_domain }}/
 {% endif %}
 
-
 {% for entry in dnsmasq_upstreams %}
 server={% for domain in entry.domains %}/{{ domain }}{% endfor %}/{{ entry.server }}
 {% endfor %}
@@ -19,4 +20,9 @@ cache-size={{ dnsmasq_cache_size }}
 
 {% if dnsmasq_query_log %}
 log-queries
+{% endif %}
+
+{% if not dnsmasq_enable_dns %}
+# DNS is disabled in ansible config
+port=0
 {% endif %}
